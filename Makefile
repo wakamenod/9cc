@@ -1,14 +1,18 @@
 CFLAGS=-std=c11	-g	-static
 PRDIR=${HOME}/Projects/CProjects/9cc
+DRUN=docker run --rm -v ${PRDIR}/9cc:/9cc -w /9cc compilerbook /bin/bash -c
 
 9cc:
-	docker run --rm -v ${PRDIR}/9cc:/9cc -w /9cc compilerbook cc -o	9cc	9cc.c
+	${DRUN} 'cc -o 9cc 9cc.c'
 
 run:	9cc
-	docker run --rm -v ${PRDIR}/9cc:/9cc -w /9cc compilerbook ./9cc 199 > tmp.s
+	${DRUN} ./9cc 199 > tmp.s
+
+tmp:
+	${DRUN}	'cc -o tmp tmp.s; ./tmp; echo "$$?"'
 
 test:	9cc
-	docker run --rm -v ${PRDIR}/9cc:/9cc -w /9cc compilerbook ./test.sh
+	${DRUN} ./test.sh
 
 clean:
 		rm -f 9cc *.o *~ tmp*
